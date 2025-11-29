@@ -23,6 +23,10 @@ enum SignUpStatuscodes  {
     ErrorInInputs = 411 , 
     ServerError = 500 
 };
+enum AnotherBrainContent {
+    ReturnsContent = 200 ,
+    Invalidordisbaledsharing = 404
+};
 enum SignInStatuscodes  {
     SignedIn = 200,
     WrongEmailPassword = 403 ,  
@@ -187,6 +191,57 @@ App.delete("/api/v1/content",usermiddleware,async function(req : Request , res:R
     {   
         res.status(DeleteDocument.Documentyoudontown).json({
             msg : "This Document is not owned by you !"
+        });
+    }
+});
+App.post("/api/v1/brain/share" ,usermiddleware ,async function(req:Request,res:Response)
+{
+    const UserId = req.body;
+    const share = req.body.share;
+
+    if(share)
+    {
+        try{
+            const UserContent = await ContentModel.findOne({
+                userId : UserId
+            });            
+            res.status(Contentadd.ContentAdded).json({
+                link : UserContent?.links
+            });
+        }
+        catch(e)
+        {
+            res.status(Contentadd.InternalServerError).json({
+                msg : "Internal Server Error !"
+            });
+        }
+    }
+    else
+    {
+        res.status(Contentadd.InternalServerError).json({
+            msg :  "Internal Server Error !"
+        });
+    }
+});
+App.get("/api/v1/brain/:shareLink" , usermiddleware , async function(req:Request,res:Response)
+{
+    const sharelink = req.params.sharelink;
+    const UserId = req.body;
+
+    try{
+        const UserContent = await ContentModel.findOne({
+            link : sharelink , 
+            userId : UserId
+        }).populate("userId" , "username");
+        
+        res.status(AnotherBrainContent.ReturnsContent).json({
+            Content : UserContent
+        });
+    }
+    catch(e)
+    {
+        res.status(AnotherBrainContent.Invalidordisbaledsharing).json({
+            msg : "The link provided is either Invalid or Disabled !"
         });
     }
 });
