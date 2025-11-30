@@ -5,7 +5,8 @@ interface ButtonStyles{
     Size : "sm" | "md" |"lg" ,
     Text : string , 
     FrontIcon ?: ReactElement , 
-    EndIcon ?: ReactElement
+    EndIcon ?: ReactElement , 
+    onClick ?: ()=>void
 };
 
 const Variant = {
@@ -22,7 +23,7 @@ const SizeStyling = {
 export function Button(props : ButtonStyles)
 {   
     return <>
-        <button type="button" className={`${Variant[props.Variant]} ${DefaultStyles} ${SizeStyling[props.Size]}`}>
+        <button type="button" onClick={props.onClick} className={`${Variant[props.Variant]} ${DefaultStyles} ${SizeStyling[props.Size]}`}>
             {props.FrontIcon}
             {props.Text}
             {props.EndIcon}
