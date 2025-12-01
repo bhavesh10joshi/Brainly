@@ -1,0 +1,1 @@
+export const ImageStyles:string = "mt-[2rem] w-[5rem] ml-[4rem]";
