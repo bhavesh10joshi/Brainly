@@ -1,21 +1,18 @@
 import express from "express";
 import {Request , Response} from "express";
-import mongoose from "mongoose";
-const ObjectId = mongoose.Types.ObjectId;
-import { string, z } from "zod";
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
-import {usermiddleware} from "./middleware/user"
-import {UserModel , ContentModel , LinkModel} from "./db"
-import tr from "zod/v4/locales/tr.js";
+import {check, z} from "zod";
+import mongoose from "mongoose";
+import { USER_SECRET } from "../Config";
+import {usermiddleware} from "../middleware/user";
+const ObjectId = mongoose.Types.ObjectId;
+import {UserModel , ContentModel , LinkModel} from "../db"
+import { Router } from "express";
+import { generateSmallId } from "../Nanoid/Nanoid";
 
-const USER_SECRET : string = "iamtheusersecret";
-const ADMIN_SECRET : string = "iamtheadminsecret";
-const mongoose_url:string = "here is the mongoose url";
-mongoose.connect(mongoose_url);
-
-const App = express();
-App.use(express.json());
+const UserRouter = Router();
+UserRouter.use(express.json());
 
 enum SignUpStatuscodes  {
     SignedUp = 200 ,
@@ -40,6 +37,7 @@ enum DeleteDocument{
     DeleteSuccess = 200 , 
     Documentyoudontown = 403
 };
+
 const zodobject = z.object({
     username : z.string().min(3).max(10) , 
     password : z.string().min(8).max(20).regex(/[A-Z]/ ,{ message : "Password should contain atleast one Uppercase Letter !"})
@@ -49,7 +47,7 @@ const zodobject = z.object({
 });
 type ZodInference = z.infer<typeof zodobject>;
 
-App.post("/api/v1/signup" , async function(req : Request,  res:Response)
+UserRouter.post("/signup" , async function(req : Request,  res:Response)
 {
     const signup:ZodInference = req.body;
     const safeparseobject = zodobject.safeParse(req.body);
@@ -70,12 +68,14 @@ App.post("/api/v1/signup" , async function(req : Request,  res:Response)
             }
             catch(e)
             {
+                console.log(e);
                 res.status(SignUpStatuscodes.ServerError).json({
                     msg :"Internal Server Error !"
                 });
             }
         }
         else{
+            console.log("kya hua ");
             res.json(SignUpStatuscodes.ServerError).json({
                 msg : "Internal Server Error !"
             });
@@ -87,7 +87,7 @@ App.post("/api/v1/signup" , async function(req : Request,  res:Response)
         });
     }
 });
-App.post("/api/v1/signin",async function(req:Request , res:Response)
+UserRouter.post("/signin",async function(req:Request , res:Response)
 {
     const username = req.body.username ;
     const password = req.body.password ; 
@@ -131,9 +131,50 @@ App.post("/api/v1/signin",async function(req:Request , res:Response)
         }); 
     }
 });
-App.post("/api/v1/content" ,usermiddleware, async  function(req:Request,res:Response)
+UserRouter.get("/brain/:shareLink" , async function(req:any,res:Response)
 {
-    const UserId = req.body;
+    const sharelink = req.params.shareLink;
+    try{
+        const Check = await LinkModel.findOne({
+            Hash : sharelink
+        });
+        
+        if(Check)
+        {
+            try{
+                const content:any = await ContentModel.findOne({
+                    userId : Check.userId
+                }).populate("userId" , "username");
+                
+                res.json({
+                    username : content.username , 
+                    content : content 
+                });
+            }
+            catch(e)
+            {
+                res.status(500).json({
+                    msg : "Internal server Error !"
+                });
+            }
+        }
+        else
+        {
+           res.status(404).json({
+            msg : "Invalid Sharing Link !"
+           });
+        }  
+    }
+    catch(e)
+    {
+        res.status(500).json({
+            msg : "Internal Server Error !"
+        });
+    }
+});
+UserRouter.use(usermiddleware);
+UserRouter.post("/content" ,usermiddleware, async  function(req:any,res:Response)
+{
     const links = req.body.links;
     const type = req.body.type;
     const title = req.body.title;
@@ -144,7 +185,7 @@ App.post("/api/v1/content" ,usermiddleware, async  function(req:Request,res:Resp
             type : type , 
             title : title , 
             tags : [] , 
-            userId : new ObjectId(UserId)
+            userId : new ObjectId(req.UserId)
         });
         res.status(Contentadd.ContentAdded).json({
             msg : "Content Added successfully !"
@@ -152,13 +193,14 @@ App.post("/api/v1/content" ,usermiddleware, async  function(req:Request,res:Resp
     }
     catch(e)
     {
+        console.log(e);
         res.status(Contentadd.InternalServerError).json({
             msg : "Internal Server Error Occurred !"
         });
     }
 });
-App.get("/api/v1/content" , usermiddleware , async function(req:Request , res:Response){
-    const UserId = req.body;
+UserRouter.get("/content" , async function(req:any , res:Response){
+    const UserId = req.UserId;
     try{
         const Content = await ContentModel.find({
             userId : UserId
@@ -169,19 +211,19 @@ App.get("/api/v1/content" , usermiddleware , async function(req:Request , res:Re
     }
     catch(e)
     {
+        console.log(e);
         res.status(Contentadd.InternalServerError).json({
             msg : "Internal Server Error Occured !" 
         });
     }
 });
-App.delete("/api/v1/content",usermiddleware,async function(req : Request , res:Response)
+UserRouter.delete("/content",async function(req : any , res:Response)
 {
-    const UserId = req.body.UserId;
     const contentId = req.body.contentId;
     try{
-        await ContentModel.deleteOne({
+        await ContentModel.deleteMany({
             _id : contentId,
-            userId : UserId
+            userId : req.UserId
         });
         res.status(DeleteDocument.DeleteSuccess).json({
             msg : "Document Deleted Successully !"
@@ -194,55 +236,38 @@ App.delete("/api/v1/content",usermiddleware,async function(req : Request , res:R
         });
     }
 });
-App.post("/api/v1/brain/share" ,usermiddleware ,async function(req:Request,res:Response)
+UserRouter.post("/brain/share" ,async function(req:any,res:Response)
 {
-    const UserId = req.body;
     const share = req.body.share;
-
-    if(share)
-    {
-        try{
-            const UserContent = await ContentModel.findOne({
-                userId : UserId
-            });            
-            res.status(Contentadd.ContentAdded).json({
-                link : UserContent?.links
-            });
-        }
-        catch(e)
+    try
+    {   
+        if(share)
         {
-            res.status(Contentadd.InternalServerError).json({
-                msg : "Internal Server Error !"
+            const Hash  = generateSmallId();
+            await LinkModel.create({
+                Hash : Hash ,
+                userId : req.UserId
+            });
+            res.status(200).json({
+                Link : Hash
             });
         }
-    }
-    else
-    {
-        res.status(Contentadd.InternalServerError).json({
-            msg :  "Internal Server Error !"
-        });
-    }
-});
-App.get("/api/v1/brain/:shareLink" , usermiddleware , async function(req:Request,res:Response)
-{
-    const sharelink = req.params.sharelink;
-    const UserId = req.body;
-
-    try{
-        const UserContent = await ContentModel.findOne({
-            link : sharelink , 
-            userId : UserId
-        }).populate("userId" , "username");
-        
-        res.status(AnotherBrainContent.ReturnsContent).json({
-            Content : UserContent
-        });
+        else
+        {
+            await LinkModel.deleteOne({
+                userId : req.UserId
+            });
+            res.status(200).json({
+                msg : "Share Link is Doisabled Successfully !"
+            });
+        }
     }
     catch(e)
     {
-        res.status(AnotherBrainContent.Invalidordisbaledsharing).json({
-            msg : "The link provided is either Invalid or Disabled !"
+        console.log(e);
+        res.status(500).json({
+            msg : "Internal Server Error !"
         });
     }
 });
-App.listen(3000);
+export default UserRouter;

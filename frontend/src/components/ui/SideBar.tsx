@@ -6,7 +6,7 @@ export function SideBar()
 {
     return <>
     <div className="bg-white fixed border border-slate-300">
-     <div className="w-full h-screen w-[20rem]">
+     <div className="h-screen w-[20rem]">
         <div className="w-full flex mt-[-1rem]">
             <div>
                 <Logo/>

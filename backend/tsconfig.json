@@ -5,7 +5,7 @@
     "outDir": "./dist",
 
     /* Module System */
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2020",
     "lib": ["ESNext"],

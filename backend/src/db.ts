@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { Schema , model } from "mongoose";
-import express from "express";
 const ObjectId = mongoose.Types.ObjectId;
 
 const contentTypes = ['Image' , 'Video' , 'Article' , 'Audio']
@@ -16,13 +15,12 @@ const Content = new Schema({
     tags : [{type : ObjectId , ref : 'Tag' }] , 
     userId : { type:ObjectId , ref:'User' , required:true}
 });
-const Link = new Schema({
-    _id : {type : ObjectId} , 
-    title : {type : String} , 
+const Links = new Schema({
+    Hash : {type : String} , 
     userId : {type : ObjectId , ref : 'User' , required : true}
 });
 
-export const UserModel = model("Users" , Users);
+export const UserModel = model("User" , Users);
 export const ContentModel = model("Content" , Content);
-export  const LinkModel = model("Links" , Link);
+export  const LinkModel = model("Links" , Links);
 

@@ -24,7 +24,7 @@ function getTwitterEmbedUrl(url: string): string {
 export function Card(props : CardStyling)
 {
     return <>
-    <div className="w-[25rem] m-3 p-2 border-[3px] rounded">
+    <div className="w-[20rem] m-3 p-2 border-[3px] rounded">
         <div className={"flex items-center"}>
             <div>
                 {props.Type === "Article" ? <><PageIcon Sizes="lg"/></> : null}
