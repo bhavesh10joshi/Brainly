@@ -1,8 +1,8 @@
 import type { ReactElement } from "react"
 
 interface ButtonStyles{
-    Variant : "primary" | "secondary" , 
-    Size : "sm" | "md" |"lg" | "ul",
+    Variant : "primary" | "secondary" | "Share", 
+    Size : "sm" | "md" |"lg" | "ul" | "Sharel",
     Text : string , 
     Load ?: ReactElement , 
     FrontIcon ?: ReactElement , 
@@ -16,14 +16,17 @@ const HoverStyles = {
 };
 const Variant = {
     "primary" : "text-[15px] bg-purple-600 text-white " , 
-    "secondary" : "text-[14px] bg-purple-300 text-purple-600"
+    "secondary" : "text-[14px] bg-purple-300 text-purple-600" ,
+    "Share" : "text-[14px] bg-[#2f27ce] text-white ml-[4rem]" 
 }
 const DefaultStyles:string = "rounded-md flex items-center";
 const SizeStyling = {
     "sm" : "px-2 py-1" , 
     "md" : "py-2 px-4" ,
     "lg" : "py-2 px-6" , 
-    "ul" : "py-3 px-6 w-[22rem] mt-[2rem] justify-center"
+    "ul" : "py-3 px-6 w-[22rem] mt-[2rem] justify-center" ,
+    "Sharel" : "py-3 px-6 w-[22rem] mt-[2rem] justify-center" ,
+
 };
 
 export function Button(props : ButtonStyles)

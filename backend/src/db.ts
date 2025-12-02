@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { Schema , model } from "mongoose";
 const ObjectId = mongoose.Types.ObjectId;
 
-const contentTypes = ['Image' , 'Video' , 'Article' , 'Audio']
 
 const Users = new Schema({
     username : {type : String , required : true , unique : true},
@@ -10,7 +9,7 @@ const Users = new Schema({
 });
 const Content = new Schema({
     links : {type : String , required : true} ,
-    type  : {type : String , enum : contentTypes , required: true},
+    type  : {type : String , required: true},
     title : {type : String , required : true } , 
     tags : [{type : ObjectId , ref : 'Tag' }] , 
     userId : { type:ObjectId , ref:'User' , required:true}

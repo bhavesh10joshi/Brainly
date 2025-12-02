@@ -1,6 +1,6 @@
 export interface IconStyling{
     Sizes : "sm" | "md" | "lg" ,
-    onClick ?: ()=>void
+    onClick ?: ()=>void ,
 };
 export const DefaultStyles :string = "pr-2";
 export const IconSizes = {

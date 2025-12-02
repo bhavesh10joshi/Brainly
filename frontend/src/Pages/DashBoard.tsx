@@ -7,8 +7,22 @@ import { Card } from '../components/ui/Cards'
 import { PopUp } from '../components/ui/PopUpWindow'
 import { SideBar } from '../components/ui/SideBar'
 import { LogOutIcon } from '../components/Icons/LogoutIcon'
+import { useNavigate } from 'react-router-dom'
+import { SharePopUp } from '../components/ui/sharepopup'
+import { UseContent } from '../components/Hooks/UseContent'
+
 export function DashBoard() {
+  const Content = UseContent();
+  const Navigate = useNavigate();
   const [open , SetClose] = useState(false);
+  const [Share , SetShare] = useState(true);
+  function CloseShareit()
+  {
+    SetShare(function(open)
+    {
+      return !Share
+    });
+  }
   function Closeit()
   {
     SetClose(function(open)
@@ -16,8 +30,14 @@ export function DashBoard() {
       return !open
     });
   }
+  function logmeout()
+  {
+    localStorage.clear();
+    Navigate("/login");
+  }
   return<>
     <div className='flex'>
+    <SharePopUp Share={Share} CloseShareit={CloseShareit}/>
     <PopUp open={open} Closeit={Closeit}/>
     <SideBar/>
     <div className='bg-slate-50 w-screen h-screen'>
@@ -32,12 +52,11 @@ export function DashBoard() {
                 <Button Variant='secondary' FrontIcon={<ShareIcon Sizes='md'/>} Size='lg' Text='Share Brain'></Button>
             </div>
             <div className='mt-[4rem] ml-[1rem]'>
-                <Button Variant='primary' FrontIcon={<LogOutIcon Sizes='md'/>} Size='lg' Text='LogOut'></Button>
+                <Button Variant='primary' FrontIcon={<LogOutIcon Sizes='md'/>} Size='lg' Text='LogOut' onClick={logmeout}></Button>
             </div>
         </div>
-        <div className='flex pl-[22rem] pt-6'>
-            <Card TopHead='How to build Second Brain' Type="Youtube" Date="12/23/25" Link="https://youtu.be/YUAbYe6e5Hc?si=Rn145bUrBxKBqy6U"></Card>
-            <Card TopHead='My First Tweet' Type="Twitter" Date="12/23/25" Link="https://x.com/cbajpai7/status/1994414296793792525?s=20"></Card>
+        <div className='flex pl-[22rem] pt-6 flex-wrap'>
+          {Content.map(({links , type , title , _id}) => <Card TopHead={title} Type={type} Link={links} Id={_id}/>)}
         </div>
     </div>
     </div>

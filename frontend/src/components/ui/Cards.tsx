@@ -3,12 +3,15 @@ import { PageIcon } from "../Icons/PageIcon";
 import { YoutubeIcon } from "../Icons/YoutubeIcon";
 import { TwitterIcon } from "../Icons/TwitterIcon";
 import { DeleteIcon } from "../Icons/DeleteIcon";
+import axios from "axios";
+import { API_URL } from "../Util";
+import { useNavigate } from "react-router-dom";
 
 interface CardStyling{
     TopHead : string , 
     Type : "Article" | "Youtube" | "Twitter" , 
-    Date : string , 
-    Link : string
+    Link : string ,
+    Id : string 
 };
 function getYouTubeEmbedUrl(url: string): string {
   const match = url.match(/(?:v=|\.be\/)([^&]+)/);
@@ -23,6 +26,31 @@ function getTwitterEmbedUrl(url: string): string {
 
 export function Card(props : CardStyling)
 {
+    const Navigate = useNavigate();
+    async function Deleteit()
+    {
+        const Id = props.Id ; 
+        const token = localStorage.getItem("token");
+        const user = await axios.delete(`${API_URL}/content`, {
+            data:{
+                contentId : Id
+            }
+         , 
+            headers:{
+                Authorization:token
+            }
+        }
+        );
+        if(user)
+        {
+            alert("Deleted successfully !");
+            Navigate("/dashboard");
+        }
+        else
+        {
+            alert("Error Occurred , Try Again later !");
+        }
+    }
     return <>
     <div className="w-[20rem] m-3 p-2 border-[3px] rounded">
         <div className={"flex items-center"}>
@@ -38,7 +66,7 @@ export function Card(props : CardStyling)
                 <a href={props.Link} target="_blank"><ShareIcon Sizes="md"/></a>
             </div>
             <div>
-                <DeleteIcon Sizes="md"/>
+                <DeleteIcon Sizes="md" onClick={Deleteit}/>
             </div>
         </div>
         <div>
@@ -50,9 +78,6 @@ export function Card(props : CardStyling)
                     <a href={getTwitterEmbedUrl(props.Link)}></a>
                 </blockquote>
             </> : null}
-        </div>
-        <div className=" text-slate-500">
-                Added On {props.Date}
         </div>
     </div>
     </>
