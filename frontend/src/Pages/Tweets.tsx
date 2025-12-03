@@ -9,10 +9,10 @@ import { SideBar } from '../components/ui/SideBar'
 import { LogOutIcon } from '../components/Icons/LogoutIcon'
 import { useNavigate } from 'react-router-dom'
 import { SharePopUp } from '../components/ui/sharepopup'
-import { UseContent } from '../components/Hooks/UseContent'
+import { UseTweets } from '../components/Hooks/UseTweets'
 
-export function DashBoard() {
-  const Content = UseContent();
+export function TweetsDashBoard() {
+  const Content = UseTweets();
   const Navigate = useNavigate();
   const [open , SetClose] = useState(false);
   const [Share , SetShare] = useState(false);
@@ -43,7 +43,7 @@ export function DashBoard() {
     <div className='bg-slate-50 w-screen h-screen'>
         <div className='w-screen flex mb-6'>
             <div className='flex justify-center items-center ml-[23rem] text-[1.7rem] mt-[5rem] font-bold'>
-                All Notes
+                    Tweets
             </div>
             <div className = 'mt-[4rem] ml-[34rem]'>
                 <Button onClick={Closeit} Variant='primary' FrontIcon={<PlusIcon Sizes='md'/>} Size='lg' Text='Add Content'></Button>

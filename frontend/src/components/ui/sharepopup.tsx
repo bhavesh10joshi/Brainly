@@ -30,7 +30,7 @@ export function SharePopUp({Share , CloseShareit} : PopUpProps)
         if(user)
         {
             try{
-                await navigator.clipboard.writeText(`${API_URL}/brain/${user.data.Link}`);
+                await navigator.clipboard.writeText(`http://localhost:5173/brain/${user.data.Link}`);
                 alert("Copied Sucessfully !");
             }
             catch(e)
@@ -56,7 +56,7 @@ export function SharePopUp({Share , CloseShareit} : PopUpProps)
                         </div>
                     </div>
                     <div className="ml-[1rem] text-slate-500 text-[0.9rem] mt-[1rem]">
-                        Share yor entire collection of youtube videos and tweets with others . They'll be able to import your content into their own Second Brain . 
+                        Share your entire collection of youtube videos and tweets with others . They'll be able to import your content into their own Second Brain . 
                     </div> 
                     <div>
                         <Button Variant="Share" Size="ul" Text="Share Brain" FrontIcon={<ClipBoardIcon Sizes="lg"/>} onClick={shareit}/>

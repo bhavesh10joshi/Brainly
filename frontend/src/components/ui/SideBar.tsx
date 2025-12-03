@@ -2,8 +2,18 @@ import { Logo } from "../Image/Logo";
 import { TwitterIcon } from "../Icons/TwitterIcon";
 import { YoutubeIcon } from "../Icons/YoutubeIcon";
 import { SideButton } from "./SideButton";
+import { useNavigate } from "react-router-dom";
 export function SideBar()
 {
+    const Navigate = useNavigate();
+    function navigatetweets()
+    {
+        Navigate("/user/tweets");
+    }
+    function navigatevideos()
+    {
+        Navigate("/user/videos");
+    }
     return <>
     <div className="bg-white fixed border border-slate-300">
      <div className="h-screen w-[20rem]">
@@ -16,9 +26,9 @@ export function SideBar()
             </div>
         </div>
         <div className="w-full pt-[3rem] pl-[1rem] pr-[1rem]">
-            <SideButton Text="Tweets" Size="lg" FrontIcon={<TwitterIcon Sizes="lg"/>}/>
+            <SideButton Text="Tweets" Size="lg" FrontIcon={<TwitterIcon Sizes="lg"/>} onClick={navigatetweets}/>
             <div className="mt-[1rem]">
-                <SideButton Text="Videos" Size="lg" FrontIcon={<YoutubeIcon Sizes="lg"/>}/>
+                <SideButton Text="Videos" Size="lg" FrontIcon={<YoutubeIcon Sizes="lg"/>} onClick={navigatevideos}/>
             </div>
         </div>
      </div>

@@ -4,13 +4,16 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt";
 import {check, z} from "zod";
 import mongoose from "mongoose";
-import { USER_SECRET } from "../Config";
 import {usermiddleware} from "../middleware/user";
 const ObjectId = mongoose.Types.ObjectId;
 import {UserModel , ContentModel , LinkModel} from "../db"
 import { Router } from "express";
 import { generateSmallId } from "../Nanoid/Nanoid";
-
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({
+  path: path.resolve(__dirname, ".../.env")
+});
 const UserRouter = Router();
 UserRouter.use(express.json());
 
@@ -102,7 +105,7 @@ UserRouter.post("/signin",async function(req:Request , res:Response)
             
             const Token = jwt.sign({
                 id : RealUser._id
-            } , USER_SECRET);
+            } , process.env.USER_SECRET as string);
 
             if(Token)
             {
@@ -142,13 +145,12 @@ UserRouter.get("/brain/:shareLink" , async function(req:any,res:Response)
         if(Check)
         {
             try{
-                const content:any = await ContentModel.findOne({
+                const content:any = await ContentModel.find({
                     userId : Check.userId
                 }).populate("userId" , "username");
                 
                 res.json({
-                    username : content.username , 
-                    content : content 
+                    msg:content
                 });
             }
             catch(e)
@@ -268,6 +270,62 @@ UserRouter.post("/brain/share" ,async function(req:any,res:Response)
         res.status(500).json({
             msg : "Internal Server Error !"
         });
+    }
+});
+UserRouter.get("/content/tweets" , usermiddleware , async function(req : any , res : Response)
+{
+    try{
+        const tweets = await ContentModel.find({
+            userId : req.UserId , 
+            type : "twitter"
+        });
+
+        if(tweets)
+        {
+            res.json({
+                msg : tweets
+            });
+        }
+        else
+        {
+            res.status(500).json({
+                msg : "Internal Server Error !"
+            });
+        }
+    }
+    catch(e)
+    {
+        res.status(500).json({
+            msg : "Internal Server Error !"
+        });  
+    }
+});
+UserRouter.get("/content/videos" , usermiddleware , async function(req : any , res : Response)
+{
+    try{
+        const videos = await ContentModel.find({
+            userId : req.UserId , 
+            type : "youtube"
+        });
+
+        if(videos)
+        {
+            res.json({
+                msg : videos
+            });
+        }
+        else
+        {
+            res.status(500).json({
+                msg : "Internal Server Error !"
+            });
+        }
+    }
+    catch(e)
+    {
+        res.status(500).json({
+            msg : "Internal Server Error !"
+        });  
     }
 });
 export default UserRouter;

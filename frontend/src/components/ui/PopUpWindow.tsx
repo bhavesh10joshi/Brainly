@@ -53,9 +53,8 @@ export function PopUp({open , Closeit} : PopUpProps)
         );
         if(user)
         {
-            alert("Content Added Successfully !");
             Closeit();
-            Navigate("/dashboard");
+            window.location.reload();
         }
         else
         {

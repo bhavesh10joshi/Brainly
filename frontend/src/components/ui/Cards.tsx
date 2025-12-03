@@ -9,9 +9,10 @@ import { useNavigate } from "react-router-dom";
 
 interface CardStyling{
     TopHead : string , 
-    Type : "Article" | "Youtube" | "Twitter" , 
+    Type : "Article" | "youtube" | "twitter" | string, 
     Link : string ,
-    Id : string 
+    Id : string ,
+    CardType ?: "share" | "normal"
 };
 function getYouTubeEmbedUrl(url: string): string {
   const match = url.match(/(?:v=|\.be\/)([^&]+)/);
@@ -43,8 +44,7 @@ export function Card(props : CardStyling)
         );
         if(user)
         {
-            alert("Deleted successfully !");
-            Navigate("/dashboard");
+            window.location.reload();
         }
         else
         {
@@ -56,8 +56,8 @@ export function Card(props : CardStyling)
         <div className={"flex items-center"}>
             <div>
                 {props.Type === "Article" ? <><PageIcon Sizes="lg"/></> : null}
-                {props.Type === "Youtube" ? <><YoutubeIcon Sizes="lg"/></> : null}
-                {props.Type === "Twitter" ? <><TwitterIcon Sizes="lg"/></> : null}
+                {props.Type === "youtube" ? <><YoutubeIcon Sizes="lg"/></> : null}
+                {props.Type === "twitter" ? <><TwitterIcon Sizes="lg"/></> : null}
             </div>
             <div className="w-[18rem] ml-2 mr-2">
                 {props.TopHead}
@@ -65,15 +65,17 @@ export function Card(props : CardStyling)
             <div>
                 <a href={props.Link} target="_blank"><ShareIcon Sizes="md"/></a>
             </div>
-            <div>
-                <DeleteIcon Sizes="md" onClick={Deleteit}/>
-            </div>
+            {
+                props.CardType === "normal" ? <div>
+                <DeleteIcon Sizes="md" onClick={Deleteit}/>  
+                </div> : null
+            }
         </div>
         <div>
-            {props.Type === "Youtube" ? <>
+            {props.Type === "youtube" ? <>
             <iframe className="w-full h-[20rem] mt-[10px] mb-[20px] rounded" src={getYouTubeEmbedUrl(props.Link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
             </>  : null}
-            {props.Type === "Twitter" ? <>
+            {props.Type === "twitter" ? <>
                 <blockquote className="twitter-tweet">
                     <a href={getTwitterEmbedUrl(props.Link)}></a>
                 </blockquote>
