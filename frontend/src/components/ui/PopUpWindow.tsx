@@ -4,7 +4,6 @@ import { Button } from "./Button"
 import { useRef, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../Util";
-import { useNavigate } from "react-router-dom";
 
 interface PopUpProps {
   open: boolean;
@@ -18,7 +17,6 @@ export function PopUp({open , Closeit} : PopUpProps)
 {
     const TitleRef = useRef<HTMLInputElement>(null);
     const LinkRef = useRef<HTMLInputElement>(null);
-    const Navigate = useNavigate();
 
     const[Type , SetType] = useState(Types["Youtube"]);
     

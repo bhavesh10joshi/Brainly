@@ -1,4 +1,3 @@
-import '../App';
 import { Logo } from '../components/Image/Logo';
 import { InputBox } from '../components/ui/InputsBox';
 import { Button } from '../components/ui/Button';

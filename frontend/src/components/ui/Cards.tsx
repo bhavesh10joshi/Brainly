@@ -5,7 +5,6 @@ import { TwitterIcon } from "../Icons/TwitterIcon";
 import { DeleteIcon } from "../Icons/DeleteIcon";
 import axios from "axios";
 import { API_URL } from "../Util";
-import { useNavigate } from "react-router-dom";
 
 interface CardStyling{
     TopHead : string , 
@@ -27,7 +26,6 @@ function getTwitterEmbedUrl(url: string): string {
 
 export function Card(props : CardStyling)
 {
-    const Navigate = useNavigate();
     async function Deleteit()
     {
         const Id = props.Id ; 

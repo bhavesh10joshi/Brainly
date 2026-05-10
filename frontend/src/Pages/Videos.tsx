@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import '../App'
 import { Button } from '../components/ui/Button'
 import { PlusIcon } from '../components/Icons/PlusIcon'
 import { ShareIcon } from '../components/Icons/ShareIcon'

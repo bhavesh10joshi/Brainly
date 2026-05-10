@@ -1,10 +1,7 @@
 import { CloseIcon } from "../Icons/CloseIcon"
-import { InputBox } from "./InputsBox"
 import { Button } from "./Button"
-import { useRef, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../Util";
-import { useNavigate } from "react-router-dom";
 import { ClipBoardIcon } from "../Icons/ClipBoardIcon";
 
 interface PopUpProps {
