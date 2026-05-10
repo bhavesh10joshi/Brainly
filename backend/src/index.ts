@@ -23,4 +23,8 @@ async function main()
         console.log("Connection Unsuccessfull !");
     }
 }
+App.get("/ping", (req, res) => {
+    res.status(200).json({ message: "pong" });
+});
+
 App.use("/api/v1/" , UserRouter);
