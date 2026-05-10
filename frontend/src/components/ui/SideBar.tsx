@@ -1,6 +1,6 @@
 import { Logo } from "../Image/Logo";
-import { TwitterIcon } from "../Icons/TwitterIcon";
-import { YoutubeIcon } from "../Icons/YoutubeIcon";
+import { TwitterIcon } from "../icons/TwitterIcon";
+import { YoutubeIcon } from "../icons/YoutubeIcon";
 import { SideButton } from "./SideButton";
 import { useNavigate } from "react-router-dom";
 export function SideBar()

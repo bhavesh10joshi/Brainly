@@ -12,7 +12,8 @@ interface ButtonStyles{
 };
 const HoverStyles = {
     "primary" : "hover:text-[15px] hover:bg-purple-300 hover:text-purple-600 " , 
-    "secondary" : "hover:text-[14px] hover:bg-purple-600 hover:text-white"
+    "secondary" : "hover:text-[14px] hover:bg-purple-600 hover:text-white" ,
+    "Share" : ""
 };
 const Variant = {
     "primary" : "text-[15px] bg-purple-600 text-white " , 
