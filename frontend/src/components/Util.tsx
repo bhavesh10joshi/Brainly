@@ -1,1 +1,1 @@
-export const API_URL: string = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/api/v1";
+export const API_URL: string = "https://brainly-7fks.onrender.com/api/v1";
