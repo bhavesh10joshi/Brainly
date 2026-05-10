@@ -1,8 +1,4 @@
-import { ShareIcon } from "../icons/ShareIcon";
-import { PageIcon } from "../icons/PageIcon";
-import { YoutubeIcon } from "../icons/YoutubeIcon";
-import { TwitterIcon } from "../icons/TwitterIcon";
-import { DeleteIcon } from "../icons/DeleteIcon";
+import { ShareIcon, PageIcon, YoutubeIcon, TwitterIcon, DeleteIcon } from "../icons";
 import axios from "axios";
 import { API_URL } from "../Util";
 

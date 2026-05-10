@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import { Button } from '../components/ui/Button'
-import { PlusIcon } from '../components/icons/PlusIcon'
-import { ShareIcon } from '../components/icons/ShareIcon'
 import { Card } from '../components/ui/Cards'
 import { PopUp } from '../components/ui/PopUpWindow'
 import { SideBar } from '../components/ui/SideBar'
-import { LogOutIcon } from '../components/icons/LogoutIcon'
 import { useNavigate } from 'react-router-dom'
 import { SharePopUp } from '../components/ui/sharepopup'
 import { UseVideos } from '../components/Hooks/UseVideos'
+import { PlusIcon, ShareIcon, LogOutIcon } from '../components/icons'
 
 export function VideosDashBoard() {
   const Content = UseVideos();

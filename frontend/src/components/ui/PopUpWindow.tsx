@@ -1,4 +1,4 @@
-import { CloseIcon } from "../icons/CloseIcon"
+import { CloseIcon } from "../icons"
 import { InputBox } from "./InputsBox"
 import { Button } from "./Button"
 import { useRef, useState } from "react";

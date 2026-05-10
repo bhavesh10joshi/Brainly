@@ -1,8 +1,7 @@
-import { CloseIcon } from "../icons/CloseIcon"
 import { Button } from "./Button"
 import axios from "axios";
 import { API_URL } from "../Util";
-import { ClipBoardIcon } from "../icons/ClipBoardIcon";
+import { CloseIcon, ClipBoardIcon } from "../icons";
 
 interface PopUpProps {
   Share: boolean;
