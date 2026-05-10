@@ -6,7 +6,9 @@ import { SideBar } from '../components/ui/SideBar'
 import { useNavigate } from 'react-router-dom'
 import { SharePopUp } from '../components/ui/sharepopup'
 import { UseContent } from '../components/Hooks/UseContent'
-import { PlusIcon, ShareIcon, LogOutIcon } from '../components/icons'
+import { PlusIcon } from '../components/icons/PlusIcon'
+import { LogOutIcon } from '../components/icons/LogoutIcon'
+import { ShareIcon } from '../components/icons/ShareIcon'
 
 export function DashBoard() {
   const Content = UseContent();
